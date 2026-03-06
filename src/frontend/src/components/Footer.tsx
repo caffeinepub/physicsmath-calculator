@@ -8,7 +8,9 @@ export function Footer() {
     <footer className="border-t border-border mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-12 flex items-center justify-center">
         <p className="text-xs text-muted-foreground flex items-center gap-1.5">
-          © {year}. Built with{" "}
+          Powered by{" "}
+          <span className="font-semibold text-foreground">RISHU ROY</span>
+          <span className="mx-1">·</span>© {year}. Built with{" "}
           <Heart className="w-3 h-3 text-red-500 fill-red-500" /> using{" "}
           <a
             href={utm}

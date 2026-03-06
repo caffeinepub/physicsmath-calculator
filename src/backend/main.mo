@@ -1,8 +1,8 @@
 import Map "mo:core/Map";
 import Array "mo:core/Array";
-import Migration "migration";
 
-(with migration = Migration.run)
+
+
 actor {
   type UnitType = Text;
   type UnitCategory = Text;
