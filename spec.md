@@ -1,54 +1,61 @@
-# PhysicsMath Calculator
+# Land Survey Unit Converter
 
 ## Current State
-New project. No existing code.
+No existing app. Starting fresh.
 
 ## Requested Changes (Diff)
 
 ### Add
-- Physics calculator modules:
-  - Kinematics (velocity, acceleration, displacement, time)
-  - Newton's Laws (force, mass, acceleration)
-  - Energy & Work (kinetic energy, potential energy, work, power)
-  - Thermodynamics (ideal gas law, heat transfer, Carnot efficiency)
-  - Waves & Oscillations (frequency, wavelength, period, wave speed)
-  - Electromagnetism (Ohm's law, Coulomb's law, capacitance, inductance)
-  - Optics (Snell's law, lens equation, magnification)
-  - Relativity (time dilation, length contraction, mass-energy equivalence E=mc²)
-  - Quantum Mechanics (de Broglie wavelength, energy levels, Heisenberg uncertainty)
-  - Gravitation (gravitational force, escape velocity, orbital period)
-
-- Mathematics calculator modules:
-  - Algebra (quadratic formula, linear equations)
-  - Geometry (area, perimeter, volume of shapes)
-  - Trigonometry (sin/cos/tan, law of sines/cosines)
-  - Calculus (derivatives, integrals of common functions)
-  - Statistics (mean, median, mode, standard deviation, variance)
-  - Unit Converter (SI units, imperial, temperature, etc.)
-
-- Frontend features:
-  - Category-based navigation (tabs/sidebar for Physics vs Math)
-  - Each calculator shows: formula display, labeled input fields, result display with units
-  - Formula is rendered visually (LaTeX-style or styled text)
-  - Calculation history stored in backend
-  - Trending/popular calculators section on home
-  - Dark/light mode toggle
-  - Responsive design
-
-- Backend features:
-  - Store calculation history per session/user
-  - Track usage count per calculator to surface trending calculators
-  - Retrieve history and popular calculators
+- Land survey unit converter with all Indian local and international area units
+- Input field for numeric value
+- "From Unit" and "To Unit" dropdowns
+- Instant conversion result display
+- Conversion table showing the input value converted to all units simultaneously
+- Mobile-responsive layout
 
 ### Modify
-- Nothing (new project)
+N/A
 
 ### Remove
-- Nothing (new project)
+N/A
 
 ## Implementation Plan
-1. Backend: define data types for calculation history (calculator name, inputs, result, timestamp) and usage tracking. Expose APIs: logCalculation, getHistory, getPopularCalculators.
-2. Frontend: implement category navigation, individual calculator components, formula display, inputs, result rendering.
-3. Frontend: implement trending/popular section on homepage.
-4. Frontend: calculation history panel.
-5. Frontend: dark/light mode toggle, responsive layout.
+
+### Units to Support
+
+**Indian Local Units (Bihar/UP/Jharkhand amin units):**
+- Bigha (1 Bigha = 27220 sq ft)
+- Kattha (1 Kattha = 1361 sq ft)
+- Dhur (1 Dhur = 68.0625 sq ft)
+- Dhurki (1 Dhurki = 17.015625 sq ft, i.e., 1/4 Dhur)
+- Guniya (1 Guniya = 1361 sq ft, same as Kattha in Bihar context)
+- Latha (1 Latha = 68.0625 sq ft, same as Dhur)
+- Decimal / Dismil (1 Decimal = 435.6 sq ft)
+- Cent (1 Cent = 435.6 sq ft)
+- Guntha (1 Guntha = 1089 sq ft)
+- Kanal (1 Kanal = 5445 sq ft)
+- Marla (1 Marla = 272.25 sq ft)
+- Biswa (1 Biswa = 1361 sq ft)
+- Ground (1 Ground = 2400 sq ft)
+- Are (1 Are = 1076.39 sq ft)
+
+**International / Standard Units:**
+- Square Millimeter (1 sq ft = 92903.04 mm²)
+- Square Centimeter (1 sq ft = 929.0304 cm²)
+- Square Meter (1 sq ft = 0.0929 m²)
+- Square Kilometer (1 sq ft = 0.0000000929 km²)
+- Square Foot (base unit)
+- Square Yard (1 sq yd = 9 sq ft)
+- Acre (1 Acre = 43560 sq ft)
+- Hectare (1 Hectare = 107639.1 sq ft)
+
+### Backend
+- Single canister with a `convert(value: Float, fromUnit: Text, toUnit: Text) -> async Float` function
+- Store conversion factors relative to square feet as base unit
+- Return converted value
+
+### Frontend
+- Header with app name and tagline
+- Converter card: value input, from/to unit selects, swap button, result display
+- "Convert to All Units" table showing the entered value in every unit
+- Clean, professional design with clear typography

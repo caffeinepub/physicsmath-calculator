@@ -5,13 +5,16 @@ import {
   FlaskConical,
   History,
   Home,
+  Map as MapIcon,
   Moon,
   Sun,
 } from "lucide-react";
 
+type Page = "home" | "calculators" | "history" | "land-survey";
+
 interface HeaderProps {
-  currentPage: "home" | "calculators" | "history";
-  onPageChange: (page: "home" | "calculators" | "history") => void;
+  currentPage: Page;
+  onPageChange: (page: Page) => void;
   isDark: boolean;
   onToggleTheme: () => void;
   historyCount?: number;
@@ -27,6 +30,7 @@ export function Header({
   const navItems = [
     { id: "home" as const, label: "Home", icon: Home },
     { id: "calculators" as const, label: "Calculators", icon: Calculator },
+    { id: "land-survey" as const, label: "Land Survey", icon: MapIcon },
     { id: "history" as const, label: "History", icon: History },
   ];
 
@@ -61,7 +65,9 @@ export function Header({
                 relative flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all
                 ${
                   currentPage === id
-                    ? "text-primary bg-primary/10"
+                    ? id === "land-survey"
+                      ? "text-survey-amber bg-survey-amber/10"
+                      : "text-primary bg-primary/10"
                     : "text-muted-foreground hover:text-foreground hover:bg-accent"
                 }
               `}
@@ -74,6 +80,14 @@ export function Header({
                   className="h-4 px-1 text-[10px] font-mono ml-0.5"
                 >
                   {historyCount}
+                </Badge>
+              )}
+              {id === "land-survey" && (
+                <Badge
+                  variant="secondary"
+                  className="h-4 px-1 text-[10px] font-mono ml-0.5 text-survey-amber bg-survey-amber/10"
+                >
+                  NEW
                 </Badge>
               )}
             </button>
@@ -105,7 +119,13 @@ export function Header({
                 type="button"
                 onClick={() => onPageChange(id)}
                 data-ocid="nav.link"
-                className={`p-1.5 rounded-md transition-colors ${currentPage === id ? "text-primary bg-primary/10" : "text-muted-foreground"}`}
+                className={`p-1.5 rounded-md transition-colors ${
+                  currentPage === id
+                    ? id === "land-survey"
+                      ? "text-survey-amber bg-survey-amber/10"
+                      : "text-primary bg-primary/10"
+                    : "text-muted-foreground"
+                }`}
               >
                 <Icon className="w-4 h-4" />
               </button>

@@ -68,6 +68,9 @@ export default {
         },
         plasma: "oklch(var(--plasma))",
         quantum: "oklch(var(--quantum))",
+        "survey-amber": "oklch(var(--survey-amber))",
+        "survey-earth": "oklch(var(--survey-earth))",
+        "survey-green": "oklch(var(--survey-green))",
       },
       fontFamily: {
         display: ['"Bricolage Grotesque"', "sans-serif"],

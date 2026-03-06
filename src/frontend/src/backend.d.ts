@@ -7,22 +7,29 @@ export interface None {
     __kind__: "None";
 }
 export type Option<T> = Some<T> | None;
-export interface CalculationRecord {
-    id: bigint;
-    inputSummary: string;
-    timestamp: bigint;
-    category: string;
-    calculatorName: string;
-    resultSummary: string;
+export type UnitType = string;
+export type UnitCategory = string;
+export interface AllUnitsConversion {
+    inputUnit: UnitType;
+    inputValue: number;
+    conversions: Array<[UnitType, number]>;
 }
-export interface PopularCalculator {
-    usageCount: bigint;
-    category: string;
-    calculatorName: string;
+export interface UnitMetadata {
+    displayName: string;
+    category: UnitCategory;
+    symbol: string;
+}
+export interface ConversionResult {
+    convertedValue: number;
+    toUnit: UnitType;
+    fromUnit: UnitType;
+    inputValue: number;
 }
 export interface backendInterface {
-    clearHistory(): Promise<void>;
-    getCalculationHistory(limit: bigint): Promise<Array<CalculationRecord>>;
-    getPopularCalculators(limit: bigint): Promise<Array<PopularCalculator>>;
-    logCalculation(calculatorName: string, category: string, inputSummary: string, resultSummary: string): Promise<void>;
+    clearUnitData(): Promise<void>;
+    convertArea(fromUnit: UnitType, toUnit: UnitType, value: number): Promise<ConversionResult | null>;
+    convertToAllUnits(inputUnit: UnitType, value: number): Promise<AllUnitsConversion | null>;
+    getSupportedUnits(): Promise<Array<UnitType>>;
+    getUnitMetadata(): Promise<Array<[UnitType, UnitMetadata]>>;
+    initializeUnits(): Promise<void>;
 }

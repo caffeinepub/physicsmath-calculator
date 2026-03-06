@@ -89,83 +89,125 @@ export class ExternalBlob {
         return this;
     }
 }
-export interface CalculationRecord {
-    id: bigint;
-    inputSummary: string;
-    timestamp: bigint;
-    category: string;
-    calculatorName: string;
-    resultSummary: string;
+export type UnitType = string;
+export type UnitCategory = string;
+export interface AllUnitsConversion {
+    inputUnit: UnitType;
+    inputValue: number;
+    conversions: Array<[UnitType, number]>;
 }
-export interface PopularCalculator {
-    usageCount: bigint;
-    category: string;
-    calculatorName: string;
+export interface UnitMetadata {
+    displayName: string;
+    category: UnitCategory;
+    symbol: string;
+}
+export interface ConversionResult {
+    convertedValue: number;
+    toUnit: UnitType;
+    fromUnit: UnitType;
+    inputValue: number;
 }
 export interface backendInterface {
-    clearHistory(): Promise<void>;
-    getCalculationHistory(limit: bigint): Promise<Array<CalculationRecord>>;
-    getPopularCalculators(limit: bigint): Promise<Array<PopularCalculator>>;
-    logCalculation(calculatorName: string, category: string, inputSummary: string, resultSummary: string): Promise<void>;
+    clearUnitData(): Promise<void>;
+    convertArea(fromUnit: UnitType, toUnit: UnitType, value: number): Promise<ConversionResult | null>;
+    convertToAllUnits(inputUnit: UnitType, value: number): Promise<AllUnitsConversion | null>;
+    getSupportedUnits(): Promise<Array<UnitType>>;
+    getUnitMetadata(): Promise<Array<[UnitType, UnitMetadata]>>;
+    initializeUnits(): Promise<void>;
 }
+import type { AllUnitsConversion as _AllUnitsConversion, ConversionResult as _ConversionResult } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
-    async clearHistory(): Promise<void> {
+    async clearUnitData(): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor.clearHistory();
+                const result = await this.actor.clearUnitData();
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.clearHistory();
+            const result = await this.actor.clearUnitData();
             return result;
         }
     }
-    async getCalculationHistory(arg0: bigint): Promise<Array<CalculationRecord>> {
+    async convertArea(arg0: UnitType, arg1: UnitType, arg2: number): Promise<ConversionResult | null> {
         if (this.processError) {
             try {
-                const result = await this.actor.getCalculationHistory(arg0);
+                const result = await this.actor.convertArea(arg0, arg1, arg2);
+                return from_candid_opt_n1(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.convertArea(arg0, arg1, arg2);
+            return from_candid_opt_n1(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async convertToAllUnits(arg0: UnitType, arg1: number): Promise<AllUnitsConversion | null> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.convertToAllUnits(arg0, arg1);
+                return from_candid_opt_n2(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.convertToAllUnits(arg0, arg1);
+            return from_candid_opt_n2(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getSupportedUnits(): Promise<Array<UnitType>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getSupportedUnits();
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.getCalculationHistory(arg0);
+            const result = await this.actor.getSupportedUnits();
             return result;
         }
     }
-    async getPopularCalculators(arg0: bigint): Promise<Array<PopularCalculator>> {
+    async getUnitMetadata(): Promise<Array<[UnitType, UnitMetadata]>> {
         if (this.processError) {
             try {
-                const result = await this.actor.getPopularCalculators(arg0);
+                const result = await this.actor.getUnitMetadata();
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.getPopularCalculators(arg0);
+            const result = await this.actor.getUnitMetadata();
             return result;
         }
     }
-    async logCalculation(arg0: string, arg1: string, arg2: string, arg3: string): Promise<void> {
+    async initializeUnits(): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor.logCalculation(arg0, arg1, arg2, arg3);
+                const result = await this.actor.initializeUnits();
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.logCalculation(arg0, arg1, arg2, arg3);
+            const result = await this.actor.initializeUnits();
             return result;
         }
     }
+}
+function from_candid_opt_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_ConversionResult]): ConversionResult | null {
+    return value.length === 0 ? null : value[0];
+}
+function from_candid_opt_n2(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_AllUnitsConversion]): AllUnitsConversion | null {
+    return value.length === 0 ? null : value[0];
 }
 export interface CreateActorOptions {
     agent?: Agent;

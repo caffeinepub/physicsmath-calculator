@@ -10,24 +10,37 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
-export interface CalculationRecord {
-  'id' : bigint,
-  'inputSummary' : string,
-  'timestamp' : bigint,
-  'category' : string,
-  'calculatorName' : string,
-  'resultSummary' : string,
+export interface AllUnitsConversion {
+  'inputUnit' : UnitType,
+  'inputValue' : number,
+  'conversions' : Array<[UnitType, number]>,
 }
-export interface PopularCalculator {
-  'usageCount' : bigint,
-  'category' : string,
-  'calculatorName' : string,
+export interface ConversionResult {
+  'convertedValue' : number,
+  'toUnit' : UnitType,
+  'fromUnit' : UnitType,
+  'inputValue' : number,
 }
+export type UnitCategory = string;
+export interface UnitMetadata {
+  'displayName' : string,
+  'category' : UnitCategory,
+  'symbol' : string,
+}
+export type UnitType = string;
 export interface _SERVICE {
-  'clearHistory' : ActorMethod<[], undefined>,
-  'getCalculationHistory' : ActorMethod<[bigint], Array<CalculationRecord>>,
-  'getPopularCalculators' : ActorMethod<[bigint], Array<PopularCalculator>>,
-  'logCalculation' : ActorMethod<[string, string, string, string], undefined>,
+  'clearUnitData' : ActorMethod<[], undefined>,
+  'convertArea' : ActorMethod<
+    [UnitType, UnitType, number],
+    [] | [ConversionResult]
+  >,
+  'convertToAllUnits' : ActorMethod<
+    [UnitType, number],
+    [] | [AllUnitsConversion]
+  >,
+  'getSupportedUnits' : ActorMethod<[], Array<UnitType>>,
+  'getUnitMetadata' : ActorMethod<[], Array<[UnitType, UnitMetadata]>>,
+  'initializeUnits' : ActorMethod<[], undefined>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

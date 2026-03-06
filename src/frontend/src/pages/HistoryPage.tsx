@@ -14,21 +14,8 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useCalculationHistory, useClearHistory } from "@/hooks/useQueries";
-import {
-  AlertTriangle,
-  ChevronRight,
-  Clock,
-  History,
-  Trash2,
-} from "lucide-react";
+import { AlertTriangle, ChevronRight, History, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-
-function formatTimestamp(ts: bigint): string {
-  const ms = Number(ts) / 1_000_000; // nanoseconds to milliseconds
-  const date = new Date(ms);
-  if (Number.isNaN(date.getTime())) return "—";
-  return date.toLocaleString();
-}
 
 export function HistoryPage() {
   const { data: history, isLoading } = useCalculationHistory(20n);
@@ -132,7 +119,7 @@ export function HistoryPage() {
             <div className="space-y-2 pr-2">
               {history.map((record, i) => (
                 <div
-                  key={record.id.toString()}
+                  key={`${record.calculatorName}-${i}`}
                   data-ocid={`history.item.${i + 1}`}
                   className="group p-4 rounded-lg border border-border bg-card hover:border-primary/30 transition-all"
                 >
@@ -157,30 +144,6 @@ export function HistoryPage() {
                           </Badge>
                         </div>
                         <ChevronRight className="w-3.5 h-3.5 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 text-xs">
-                        <div className="text-muted-foreground">
-                          <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground/60">
-                            Input:{" "}
-                          </span>
-                          <span className="font-mono text-foreground/80">
-                            {record.inputSummary}
-                          </span>
-                        </div>
-                        <div className="text-muted-foreground">
-                          <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground/60">
-                            Result:{" "}
-                          </span>
-                          <span className="font-mono text-primary font-medium">
-                            {record.resultSummary}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-1 mt-2 text-[10px] text-muted-foreground">
-                        <Clock className="w-2.5 h-2.5" />
-                        <span>{formatTimestamp(record.timestamp)}</span>
                       </div>
                     </div>
                   </div>

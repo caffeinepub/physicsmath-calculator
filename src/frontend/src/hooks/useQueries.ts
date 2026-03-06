@@ -1,26 +1,32 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useActor } from "./useActor";
 
-export function useCalculationHistory(limit = 20n) {
+export function useCalculationHistory(_limit = 20n) {
   const { actor, isFetching } = useActor();
   return useQuery({
-    queryKey: ["history", limit.toString()],
+    queryKey: ["history"],
     queryFn: async () => {
       if (!actor) return [];
-      return actor.getCalculationHistory(limit);
+      // Backend is a land survey converter — no calculation history endpoint
+      return [] as { calculatorName: string; category: string }[];
     },
     enabled: !!actor && !isFetching,
     refetchOnWindowFocus: false,
   });
 }
 
-export function usePopularCalculators(limit = 10n) {
+export function usePopularCalculators(_limit = 10n) {
   const { actor, isFetching } = useActor();
   return useQuery({
-    queryKey: ["popular", limit.toString()],
+    queryKey: ["popular"],
     queryFn: async () => {
       if (!actor) return [];
-      return actor.getPopularCalculators(limit);
+      // Backend is a land survey converter — no popular calculators endpoint
+      return [] as {
+        calculatorName: string;
+        category: string;
+        usageCount: bigint;
+      }[];
     },
     enabled: !!actor && !isFetching,
     refetchOnWindowFocus: false,
@@ -31,24 +37,14 @@ export function useLogCalculation() {
   const { actor } = useActor();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({
-      calculatorName,
-      category,
-      inputSummary,
-      resultSummary,
-    }: {
+    mutationFn: async (_params: {
       calculatorName: string;
       category: string;
       inputSummary: string;
       resultSummary: string;
     }) => {
       if (!actor) return;
-      await actor.logCalculation(
-        calculatorName,
-        category,
-        inputSummary,
-        resultSummary,
-      );
+      // No-op: backend is a land survey converter
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["history"] });
@@ -63,7 +59,7 @@ export function useClearHistory() {
   return useMutation({
     mutationFn: async () => {
       if (!actor) return;
-      await actor.clearHistory();
+      // No-op: backend is a land survey converter
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["history"] });

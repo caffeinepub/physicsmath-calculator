@@ -8,69 +8,87 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
-export const CalculationRecord = IDL.Record({
-  'id' : IDL.Nat,
-  'inputSummary' : IDL.Text,
-  'timestamp' : IDL.Int,
-  'category' : IDL.Text,
-  'calculatorName' : IDL.Text,
-  'resultSummary' : IDL.Text,
+export const UnitType = IDL.Text;
+export const ConversionResult = IDL.Record({
+  'convertedValue' : IDL.Float64,
+  'toUnit' : UnitType,
+  'fromUnit' : UnitType,
+  'inputValue' : IDL.Float64,
 });
-export const PopularCalculator = IDL.Record({
-  'usageCount' : IDL.Nat,
-  'category' : IDL.Text,
-  'calculatorName' : IDL.Text,
+export const AllUnitsConversion = IDL.Record({
+  'inputUnit' : UnitType,
+  'inputValue' : IDL.Float64,
+  'conversions' : IDL.Vec(IDL.Tuple(UnitType, IDL.Float64)),
+});
+export const UnitCategory = IDL.Text;
+export const UnitMetadata = IDL.Record({
+  'displayName' : IDL.Text,
+  'category' : UnitCategory,
+  'symbol' : IDL.Text,
 });
 
 export const idlService = IDL.Service({
-  'clearHistory' : IDL.Func([], [], []),
-  'getCalculationHistory' : IDL.Func(
-      [IDL.Nat],
-      [IDL.Vec(CalculationRecord)],
+  'clearUnitData' : IDL.Func([], [], []),
+  'convertArea' : IDL.Func(
+      [UnitType, UnitType, IDL.Float64],
+      [IDL.Opt(ConversionResult)],
       ['query'],
     ),
-  'getPopularCalculators' : IDL.Func(
-      [IDL.Nat],
-      [IDL.Vec(PopularCalculator)],
+  'convertToAllUnits' : IDL.Func(
+      [UnitType, IDL.Float64],
+      [IDL.Opt(AllUnitsConversion)],
       ['query'],
     ),
-  'logCalculation' : IDL.Func([IDL.Text, IDL.Text, IDL.Text, IDL.Text], [], []),
+  'getSupportedUnits' : IDL.Func([], [IDL.Vec(UnitType)], ['query']),
+  'getUnitMetadata' : IDL.Func(
+      [],
+      [IDL.Vec(IDL.Tuple(UnitType, UnitMetadata))],
+      ['query'],
+    ),
+  'initializeUnits' : IDL.Func([], [], []),
 });
 
 export const idlInitArgs = [];
 
 export const idlFactory = ({ IDL }) => {
-  const CalculationRecord = IDL.Record({
-    'id' : IDL.Nat,
-    'inputSummary' : IDL.Text,
-    'timestamp' : IDL.Int,
-    'category' : IDL.Text,
-    'calculatorName' : IDL.Text,
-    'resultSummary' : IDL.Text,
+  const UnitType = IDL.Text;
+  const ConversionResult = IDL.Record({
+    'convertedValue' : IDL.Float64,
+    'toUnit' : UnitType,
+    'fromUnit' : UnitType,
+    'inputValue' : IDL.Float64,
   });
-  const PopularCalculator = IDL.Record({
-    'usageCount' : IDL.Nat,
-    'category' : IDL.Text,
-    'calculatorName' : IDL.Text,
+  const AllUnitsConversion = IDL.Record({
+    'inputUnit' : UnitType,
+    'inputValue' : IDL.Float64,
+    'conversions' : IDL.Vec(IDL.Tuple(UnitType, IDL.Float64)),
+  });
+  const UnitCategory = IDL.Text;
+  const UnitMetadata = IDL.Record({
+    'displayName' : IDL.Text,
+    'category' : UnitCategory,
+    'symbol' : IDL.Text,
   });
   
   return IDL.Service({
-    'clearHistory' : IDL.Func([], [], []),
-    'getCalculationHistory' : IDL.Func(
-        [IDL.Nat],
-        [IDL.Vec(CalculationRecord)],
+    'clearUnitData' : IDL.Func([], [], []),
+    'convertArea' : IDL.Func(
+        [UnitType, UnitType, IDL.Float64],
+        [IDL.Opt(ConversionResult)],
         ['query'],
       ),
-    'getPopularCalculators' : IDL.Func(
-        [IDL.Nat],
-        [IDL.Vec(PopularCalculator)],
+    'convertToAllUnits' : IDL.Func(
+        [UnitType, IDL.Float64],
+        [IDL.Opt(AllUnitsConversion)],
         ['query'],
       ),
-    'logCalculation' : IDL.Func(
-        [IDL.Text, IDL.Text, IDL.Text, IDL.Text],
+    'getSupportedUnits' : IDL.Func([], [IDL.Vec(UnitType)], ['query']),
+    'getUnitMetadata' : IDL.Func(
         [],
-        [],
+        [IDL.Vec(IDL.Tuple(UnitType, UnitMetadata))],
+        ['query'],
       ),
+    'initializeUnits' : IDL.Func([], [], []),
   });
 };
 

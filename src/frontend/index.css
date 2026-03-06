@@ -93,6 +93,15 @@
     --quantum: 0.55 0.22 295;
     --formula-bg: 0.94 0.01 260;
     --formula-border: 0.78 0.05 260;
+
+    /* Land survey tokens */
+    --survey-amber: 0.72 0.18 72;
+    --survey-earth: 0.55 0.12 55;
+    --survey-green: 0.58 0.15 145;
+    --survey-bg: 0.97 0.008 80;
+    --survey-card: 1 0 0;
+    --survey-result: 0.94 0.04 80;
+    --survey-result-border: 0.82 0.1 72;
   }
 
   /* ── Dark mode (default aesthetic) ── */
@@ -154,6 +163,15 @@
     --quantum: 0.62 0.22 295;
     --formula-bg: 0.12 0.03 270;
     --formula-border: 0.35 0.08 270;
+
+    /* Land survey tokens - warm amber in dark */
+    --survey-amber: 0.75 0.18 72;
+    --survey-earth: 0.6 0.14 55;
+    --survey-green: 0.65 0.16 145;
+    --survey-bg: 0.1 0.015 265;
+    --survey-card: 0.14 0.018 265;
+    --survey-result: 0.16 0.05 72;
+    --survey-result-border: 0.35 0.1 72;
   }
 
   * {
@@ -307,4 +325,44 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 input[type="number"] {
   -moz-appearance: textfield;
+}
+
+/* ── Land Survey Converter ── */
+.survey-amber {
+  color: oklch(var(--survey-amber));
+}
+
+.survey-amber-bg {
+  background-color: oklch(var(--survey-amber) / 0.1);
+}
+
+.survey-amber-border {
+  border-color: oklch(var(--survey-amber) / 0.4);
+}
+
+.survey-result-bg {
+  background: oklch(var(--survey-result));
+  border: 1px solid oklch(var(--survey-result-border));
+}
+
+.cadaster-grid {
+  background-image:
+    linear-gradient(oklch(var(--survey-amber) / 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(var(--survey-amber) / 0.06) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.glow-amber {
+  box-shadow:
+    0 0 20px oklch(var(--survey-amber) / 0.25),
+    0 0 60px oklch(var(--survey-amber) / 0.08);
+}
+
+@keyframes result-flash {
+  0% { opacity: 0.5; transform: scale(0.98); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.result-flash {
+  animation: result-flash 0.2s ease-out;
 }

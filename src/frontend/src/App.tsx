@@ -7,9 +7,10 @@ import { useCalculationHistory } from "@/hooks/useQueries";
 import { CalculatorsPage } from "@/pages/CalculatorsPage";
 import { HistoryPage } from "@/pages/HistoryPage";
 import { HomePage } from "@/pages/HomePage";
+import { LandSurveyPage } from "@/pages/LandSurveyPage";
 import { useCallback, useEffect, useState } from "react";
 
-type Page = "home" | "calculators" | "history";
+type Page = "home" | "calculators" | "history" | "land-survey";
 
 export default function App() {
   const [page, setPage] = useState<Page>("home");
@@ -78,6 +79,7 @@ export default function App() {
           />
         )}
         {page === "history" && <HistoryPage />}
+        {page === "land-survey" && <LandSurveyPage />}
       </div>
 
       <Footer />
